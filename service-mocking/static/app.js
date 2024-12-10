@@ -1,4 +1,6 @@
-const mockData = [
+const API = "http://localhost:3000/";
+
+const data = [
   {
     id: "A1",
     name: "Vacuum Cleaner",
@@ -18,10 +20,13 @@ const mockData = [
     info: "Deliciously overpriced chocolate.",
   },
 ];
-const populateProducts = () => {
+
+const populateProducts = async () => {
   const products = document.querySelector("#products");
   products.innerHTML = "";
-  for (const product of mockData) {
+  const res = await fetch(API);
+  const data = await res.json();
+  for (const product of data) {
     const item = document.createElement("product-item");
     for (const key of ["name", "rrp", "info"]) {
       const span = document.createElement("span");
@@ -42,8 +47,8 @@ customElements.define(
   class Item extends HTMLElement {
     constructor() {
       super();
-      const itemTmpl = document.querySelector("#item").content.cloneNode(true);
-      this.attachShadow({ mode: "open" }).appendChild(itemTmpl);
+      const itemTmpl = document.querySelector("#item").content;
+      this.attachShadow({ mode: "open" }).appendChild(itemTmpl.cloneNode(true));
     }
   }
 );
